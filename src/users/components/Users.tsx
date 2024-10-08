@@ -1,30 +1,29 @@
-import { useForm } from "react-hook-form"
+import { useFormContext } from "react-hook-form"
+import { TextField, Stack } from "@mui/material"
+import { Schema, schema } from "../types/schema"
+import { RHFAutoComplete } from "../../components/RHFAutoComplete"
 export function Users() {
   const {
     register,
     formState: { errors },
-    handleSubmit,
-  } = useForm<{ email: string }>({ mode: "all" })
-
-  const onSubmit = () => {
-    console.log("submit")
-  }
+  } = useFormContext<Schema>()
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        {...register("email", {
-          required: {
-            value: true,
-            message: "The email is required",
-          },
-          maxLength: {
-            value: 10,
-            message: "Too many characters",
-          },
-        })}
-        placeholder="Email"
-      ></input>
-      <p>{errors.email?.message}</p>
-    </form>
+    <>
+      <Stack sx={{ gap: 2 }}>
+        <TextField
+          {...register("name")}
+          label="Name"
+          error={!!errors.name}
+          helperText={errors.name?.message}
+        />
+        <TextField
+          {...register("email")}
+          label="Email"
+          error={!!errors.email}
+          helperText={errors.email?.message}
+        />
+        <RHFAutoComplete<Schema> name="states" />
+      </Stack>
+    </>
   )
 }
